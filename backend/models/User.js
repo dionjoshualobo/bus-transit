@@ -1,6 +1,3 @@
-const mongoose = require('mongoose');
-
-const UserSchema = new mongoose.Schema({
 // Local JSON storage for User model
 const jsonStorage = require('../utils/jsonStorage');
 const readData = jsonStorage.readData;
@@ -47,5 +44,3 @@ module.exports = {
 	updateUser,
 	deleteUser
 };
-
-// Export removed. Replace with alternative export logic as needed.

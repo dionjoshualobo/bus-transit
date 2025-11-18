@@ -1,12 +1,3 @@
-const mongoose = require('mongoose');
-
-const BusSchema = new mongoose.Schema({
-  registration: String,
-  capacity: Number,
-  company: String,
-  // route: { type: mongoose.Schema.Types.ObjectId, ref: 'Route' }
-}, { timestamps: true });
-
 // Local JSON storage for Bus model
 const jsonStorage = require('../utils/jsonStorage');
 const readData = jsonStorage.readData;

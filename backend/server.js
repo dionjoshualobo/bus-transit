@@ -20,9 +20,16 @@ app.get('/api/db-check', async (req, res) => {
   try {
     const { sequelize } = require('./config/db');
     await sequelize.authenticate();
-    res.json({ status: 'Database connection successful' });
+    res.json({ 
+      status: 'PostgreSQL connected',
+      storage: 'database'
+    });
   } catch (err) {
-    res.status(500).json({ status: 'Database connection failed', error: err.message });
+    res.json({ 
+      status: 'Using JSON storage (PostgreSQL not connected)',
+      storage: 'json',
+      message: 'Server is running normally with file-based storage'
+    });
   }
 });
 

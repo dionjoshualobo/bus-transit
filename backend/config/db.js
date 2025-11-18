@@ -17,8 +17,9 @@ const connectDB = async () => {
     await sequelize.authenticate();
     console.log('PostgreSQL connected');
   } catch (err) {
-    console.error('PostgreSQL connection error:', err.message);
-    process.exit(1);
+    console.warn('PostgreSQL connection error:', err.message);
+    console.warn('Continuing with JSON storage fallback...');
+    // Don't exit - allow app to continue with JSON storage
   }
 };
 
