@@ -83,9 +83,27 @@ export const authApi = {
   getCurrentUser: () => apiFetch("/auth/me"),
 };
 
+// Places API functions
+export const placesApi = {
+  autocomplete: (query: string) => apiFetch(`/places/autocomplete?q=${encodeURIComponent(query)}`),
+  details: (placeId: string) => apiFetch(`/places/details?placeId=${encodeURIComponent(placeId)}`),
+  searchNearby: (type: string, location?: string, radius?: number) => {
+    const params = new URLSearchParams({ type });
+    if (location) params.append('location', location);
+    if (radius) params.append('radius', radius.toString());
+    return apiFetch(`/places/nearby?${params}`);
+  },
+  search: (query: string, location?: string) => {
+    const params = new URLSearchParams({ query });
+    if (location) params.append('location', location);
+    return apiFetch(`/places/search?${params}`);
+  },
+};
+
 export default {
   buses: busApi,
   routes: routeApi,
   trips: tripApi,
   auth: authApi,
+  places: placesApi,
 };

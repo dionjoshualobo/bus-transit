@@ -62,6 +62,49 @@ const Index = () => {
         </div>
       </section>
 
+      {/* FIND Section - Lodges, Hospitals, ATMs, Restaurants */}
+      <section className="container mx-auto px-4 py-12 md:py-16 border-t border-border">
+        <h2 className="text-2xl md:text-3xl font-bold text-foreground mb-4 text-center">
+          FIND
+        </h2>
+        <p className="text-muted-foreground text-center mb-8">
+          Discover nearby places along your route
+        </p>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-5xl mx-auto mb-8">
+          <FindCard
+            title="Lodge"
+            description="Find accommodations near you"
+            icon="hotel"
+            onClick={() => console.log("Find Lodge")}
+          />
+          <FindCard
+            title="Hospitals"
+            description="Locate nearby medical facilities"
+            icon="hospital"
+            onClick={() => console.log("Find Hospitals")}
+          />
+          <FindCard
+            title="ATM / Banks"
+            description="Find ATMs and banking services"
+            icon="bank"
+            onClick={() => console.log("Find ATM/Banks")}
+          />
+          <FindCard
+            title="Restaurants"
+            description="Discover dining options"
+            icon="restaurant"
+            onClick={() => console.log("Find Restaurants")}
+          />
+        </div>
+        <div className="max-w-2xl mx-auto">
+          <input
+            type="text"
+            placeholder="Search e.g. grocery"
+            className="w-full px-4 py-3 rounded-lg border border-border bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary"
+          />
+        </div>
+      </section>
+
       {/* Map Section */}
       <section className="container mx-auto px-4 py-12 md:py-16">
         <div className="space-y-4 mb-8 text-center">

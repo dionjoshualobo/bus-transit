@@ -1,11 +1,11 @@
-import { Bus, Clock, MapPin, ArrowRight } from "lucide-react";
+import { Bus, Clock, MapPin, ArrowRight, Hotel, Hospital, Landmark, UtensilsCrossed } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 
 interface FindCardProps {
   title: string;
   description: string;
-  icon: "bus" | "route" | "time";
+  icon: "bus" | "route" | "time" | "hotel" | "hospital" | "bank" | "restaurant";
   onClick?: () => void;
 }
 
@@ -14,6 +14,10 @@ const FindCard = ({ title, description, icon, onClick }: FindCardProps) => {
     bus: <Bus className="h-8 w-8 text-primary" />,
     route: <MapPin className="h-8 w-8 text-primary" />,
     time: <Clock className="h-8 w-8 text-primary" />,
+    hotel: <Hotel className="h-8 w-8 text-primary" />,
+    hospital: <Hospital className="h-8 w-8 text-primary" />,
+    bank: <Landmark className="h-8 w-8 text-primary" />,
+    restaurant: <UtensilsCrossed className="h-8 w-8 text-primary" />,
   };
 
   return (
