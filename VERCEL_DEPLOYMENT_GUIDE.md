@@ -1,7 +1,7 @@
 # 🚀 Vercel Deployment Guide - Bus Transit App
 
 ## ✅ Prerequisites Checklist
-- [x] GitHub repository: `aksh56511/bus` (public repo)
+- [x] GitHub repository: `dionjoshualobo/bus-transit` (public repo)
 - [x] All code committed and pushed to `main` branch
 - [x] Vercel configuration file (`vercel.json`) present
 - [x] Environment-aware API calls configured
@@ -23,7 +23,7 @@
 2. Click the **"Add New..."** button (top-right)
 3. Select **"Project"** from the dropdown menu
 4. You'll see a list of your GitHub repositories
-5. Find **`aksh56511/bus`** in the list
+5. Find **`dionjoshualobo/bus-transit`** in the list
 6. Click the **"Import"** button next to it
 
 ---
@@ -267,7 +267,7 @@ Vercel auto-deploys on every push to `main` branch:
 ## 📞 Support
 
 **Vercel Documentation:** https://vercel.com/docs
-**This Project on GitHub:** https://github.com/aksh56511/bus
+**This Project on GitHub:** https://github.com/dionjoshualobo/bus-transit
 
 ---
 
