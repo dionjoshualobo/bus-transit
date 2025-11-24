@@ -1,10 +1,10 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { ArrowRight, Bus, Clock, MapPin, Route as RouteIcon, IndianRupee, Repeat } from "lucide-react";
+import { ArrowRight, Bus, Clock, MapPin, Route as RouteIcon, IndianRupee, Repeat, ArrowUpDown } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import Navbar from "@/components/Navbar";
 import ChatbotPanel from "@/components/ChatbotPanel";
@@ -23,6 +23,7 @@ interface RouteSegment {
   routeName: string;
   busNumber: string;
   busType: string;
+  direction?: string;
   from: string;
   to: string;
   distance: number;
@@ -37,6 +38,14 @@ interface Stop {
   location: string;
   coordinates?: { lat: number; lng: number };
   facilities?: string[];
+  routeCount?: number;
+  servingRoutes?: Array<{
+    routeId: string;
+    routeName: string;
+    busNumber: string;
+    busType: string;
+    frequency: string;
+  }>;
 }
 
 interface RouteResult {
@@ -44,6 +53,7 @@ interface RouteResult {
   routeName?: string;
   busNumber?: string;
   busType?: string;
+  direction?: string;
   distance?: number;
   duration?: string;
   totalFare?: number;
@@ -54,19 +64,10 @@ interface RouteResult {
   stops?: RouteStop[];
   segments?: RouteSegment[];
   transferPoint?: string;
+  waitTime?: string;
   totalDistance?: number;
   totalDuration?: string;
 }
-
-const STOPS = [
-  "KSRTC Bus Stand Mangalore", "Hampankatta", "Surathkal NITK", "Baikampady", "Mulki",
-  "Katapadi Junction", "Manipal MIT Campus", "Udupi Bus Stand", "Kadri Temple", "Falnir Road",
-  "Karavali Bypass", "Kundapura Bus Stand", "Karkala", "BC Road", "Moodbidri",
-  "Kalyanpura", "Jyothi Circle", "Adyar", "Mangalore Central Railway Station", "Pumpwell Circle",
-  "Valencia", "Kankanady Market", "Mangalore Junction", "Bunts Hostel Circle", "Malpe Beach",
-  "Manipal Hospital", "Parkala Junction", "Brahmavar", "Shirva", "Hiriyadka",
-  "Padubidri", "Kaup Beach", "Santhekatte", "Ambalpady", "Nityananda Ashram"
-];
 
 const Routes = () => {
   const [from, setFrom] = useState("");
@@ -75,7 +76,29 @@ const Routes = () => {
   const [routes, setRoutes] = useState<RouteResult[]>([]);
   const [fromStop, setFromStop] = useState<Stop | null>(null);
   const [toStop, setToStop] = useState<Stop | null>(null);
+  const [availableStops, setAvailableStops] = useState<Stop[]>([]);
+  const [loadingStops, setLoadingStops] = useState(true);
   const { toast } = useToast();
+
+  // Load available stops on component mount
+  useEffect(() => {
+    const loadStops = async () => {
+      try {
+        const response = await fetch(`${API_URL}/routes/stops`);
+        const data = await response.json();
+        
+        if (response.ok && data.stops) {
+          setAvailableStops(data.stops);
+        }
+      } catch (error) {
+        console.error('Failed to load stops:', error);
+      } finally {
+        setLoadingStops(false);
+      }
+    };
+
+    loadStops();
+  }, []);
 
   const handleSearch = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -160,14 +183,17 @@ const Routes = () => {
               <div className="grid md:grid-cols-2 gap-4">
                 <div className="space-y-2">
                   <Label htmlFor="from">From</Label>
-                  <Select value={from} onValueChange={setFrom} required>
+                  <Select value={from} onValueChange={setFrom} required disabled={loadingStops}>
                     <SelectTrigger id="from">
-                      <SelectValue placeholder="Select source location" />
+                      <SelectValue placeholder={loadingStops ? "Loading stops..." : "Select source location"} />
                     </SelectTrigger>
                     <SelectContent>
-                      {STOPS.map((stop) => (
-                        <SelectItem key={stop} value={stop}>
-                          {stop}
+                      {availableStops.map((stop) => (
+                        <SelectItem key={stop.id} value={stop.name}>
+                          <div className="flex flex-col">
+                            <span>{stop.name}</span>
+                            <span className="text-xs text-muted-foreground">{stop.location} • {stop.routeCount} routes</span>
+                          </div>
                         </SelectItem>
                       ))}
                     </SelectContent>
@@ -175,14 +201,17 @@ const Routes = () => {
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="to">To</Label>
-                  <Select value={to} onValueChange={setTo} required>
+                  <Select value={to} onValueChange={setTo} required disabled={loadingStops}>
                     <SelectTrigger id="to">
-                      <SelectValue placeholder="Select destination" />
+                      <SelectValue placeholder={loadingStops ? "Loading stops..." : "Select destination"} />
                     </SelectTrigger>
                     <SelectContent>
-                      {STOPS.map((stop) => (
-                        <SelectItem key={stop} value={stop}>
-                          {stop}
+                      {availableStops.map((stop) => (
+                        <SelectItem key={stop.id} value={stop.name}>
+                          <div className="flex flex-col">
+                            <span>{stop.name}</span>
+                            <span className="text-xs text-muted-foreground">{stop.location} • {stop.routeCount} routes</span>
+                          </div>
                         </SelectItem>
                       ))}
                     </SelectContent>
@@ -220,6 +249,11 @@ const Routes = () => {
                           <div className="flex items-center gap-2 mb-2">
                             <Badge variant="default" className="bg-green-500">Direct</Badge>
                             <Badge variant="outline">{route.busType}</Badge>
+                            {route.direction && (
+                              <Badge variant="secondary" className="text-xs">
+                                {route.direction === 'forward' ? '→' : '←'} {route.direction}
+                              </Badge>
+                            )}
                           </div>
                           <h3 className="text-xl font-semibold mb-1">{route.routeName}</h3>
                           <p className="text-sm text-muted-foreground flex items-center gap-1">
@@ -271,6 +305,12 @@ const Routes = () => {
                           <div className="flex items-center gap-2 mb-2">
                             <Badge variant="default" className="bg-orange-500">1 Transfer</Badge>
                             <Badge variant="outline">at {route.transferPoint}</Badge>
+                            {route.waitTime && (
+                              <Badge variant="secondary" className="text-xs">
+                                <Clock className="h-3 w-3 mr-1" />
+                                Wait: {route.waitTime}
+                              </Badge>
+                            )}
                           </div>
                           <h3 className="text-lg font-semibold">Multi-segment Journey</h3>
                         </div>
@@ -288,7 +328,14 @@ const Routes = () => {
                           <div key={i} className="border-l-4 border-primary pl-4 py-2">
                             <div className="flex items-center justify-between mb-2">
                               <div>
-                                <p className="font-medium">{segment.routeName}</p>
+                                <div className="flex items-center gap-2">
+                                  <p className="font-medium">{segment.routeName}</p>
+                                  {segment.direction && (
+                                    <Badge variant="secondary" className="text-xs">
+                                      {segment.direction === 'forward' ? '→' : '←'}
+                                    </Badge>
+                                  )}
+                                </div>
                                 <p className="text-sm text-muted-foreground">
                                   Bus: {segment.busNumber} ({segment.busType})
                                 </p>

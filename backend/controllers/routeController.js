@@ -45,13 +45,58 @@ exports.findRoutes = (req, res) => {
     res.json({
       from: fromStop,
       to: toStop,
-      routes: allRoutes.slice(0, 5), // Return top 5 routes
+      routes: allRoutes.slice(0, 10), // Return top 10 routes for better options
       totalRoutes: allRoutes.length
     });
 
   } catch (error) {
     console.error('Route finding error:', error);
     res.status(500).json({ error: 'Failed to find routes' });
+  }
+};
+
+// Get all stops with their route connectivity information
+exports.getAllStopsWithRoutes = (req, res) => {
+  try {
+    const stops = Stop.getAllStops();
+    const routes = Route.getAllRoutes();
+    const buses = Bus.getAllBuses();
+
+    const stopsWithRoutes = stops.map(stop => {
+      // Find all routes that serve this stop
+      const servingRoutes = routes.filter(route => 
+        route.stops.some(routeStop => routeStop.stopId === stop.id)
+      ).map(route => {
+        const bus = buses.find(b => b.id === route.busId);
+        const stopOnRoute = route.stops.find(rs => rs.stopId === stop.id);
+        
+        return {
+          routeId: route.id,
+          routeName: route.name,
+          busNumber: bus?.number || 'N/A',
+          busType: bus?.type || 'Standard',
+          frequency: route.frequency,
+          order: stopOnRoute?.order || 0,
+          arrivalTime: stopOnRoute?.arrivalTime,
+          departureTime: stopOnRoute?.departureTime
+        };
+      });
+
+      return {
+        ...stop,
+        routeCount: servingRoutes.length,
+        servingRoutes: servingRoutes.sort((a, b) => a.order - b.order)
+      };
+    });
+
+    res.json({
+      stops: stopsWithRoutes.sort((a, b) => b.routeCount - a.routeCount), // Most connected stops first
+      totalStops: stopsWithRoutes.length
+    });
+
+  } catch (error) {
+    console.error('Error fetching stops with routes:', error);
+    res.status(500).json({ error: 'Failed to fetch stops data' });
   }
 };
 
@@ -63,13 +108,24 @@ function findDirectRoutes(routes, buses, stops, fromStopId, toStopId) {
     const fromIndex = route.stops.findIndex(s => s.stopId === fromStopId);
     const toIndex = route.stops.findIndex(s => s.stopId === toStopId);
 
-    if (fromIndex !== -1 && toIndex !== -1 && fromIndex < toIndex) {
+    // Allow both forward and backward travel on the same route
+    if (fromIndex !== -1 && toIndex !== -1 && fromIndex !== toIndex) {
       const bus = buses.find(b => b.id === route.busId);
-      const routeStops = route.stops.slice(fromIndex, toIndex + 1);
       
+      // Determine direction and slice accordingly
+      const isForward = fromIndex < toIndex;
+      const startIdx = Math.min(fromIndex, toIndex);
+      const endIdx = Math.max(fromIndex, toIndex);
+      const routeStops = route.stops.slice(startIdx, endIdx + 1);
+      
+      // If backward, reverse the stops and times
+      if (!isForward) {
+        routeStops.reverse();
+      }
+
       // Calculate distance
       let distance = 0;
-      for (let i = fromIndex; i < toIndex; i++) {
+      for (let i = startIdx; i < endIdx; i++) {
         distance += calculateDistance(
           stops.find(s => s.id === route.stops[i].stopId),
           stops.find(s => s.id === route.stops[i + 1].stopId)
@@ -77,13 +133,18 @@ function findDirectRoutes(routes, buses, stops, fromStopId, toStopId) {
       }
 
       const fare = Math.round(distance * (bus?.farePerKm || 1.2));
-      const duration = calculateDuration(route.stops[fromIndex].departureTime, route.stops[toIndex].arrivalTime);
+      
+      // Calculate duration based on actual direction
+      const departureTime = isForward ? route.stops[fromIndex].departureTime : route.stops[fromIndex].arrivalTime;
+      const arrivalTime = isForward ? route.stops[toIndex].arrivalTime : route.stops[toIndex].departureTime;
+      const duration = calculateDuration(departureTime, arrivalTime);
 
       directRoutes.push({
         type: 'direct',
         routeName: route.name,
         busNumber: bus?.number || 'N/A',
         busType: bus?.type || 'Unknown',
+        direction: isForward ? 'forward' : 'return',
         stops: routeStops.map(s => ({
           ...s,
           stopName: stops.find(st => st.id === s.stopId)?.name || 'Unknown'
@@ -93,8 +154,8 @@ function findDirectRoutes(routes, buses, stops, fromStopId, toStopId) {
         totalFare: fare,
         frequency: route.frequency,
         amenities: bus?.amenities || [],
-        departureTime: route.stops[fromIndex].departureTime,
-        arrivalTime: route.stops[toIndex].arrivalTime
+        departureTime,
+        arrivalTime
       });
     }
   }
@@ -110,7 +171,10 @@ function findTransferRoutes(routes, buses, stops, fromStopId, toStopId) {
     const fromIndex1 = route1.stops.findIndex(s => s.stopId === fromStopId);
     if (fromIndex1 === -1) continue;
 
-    for (let i = fromIndex1 + 1; i < route1.stops.length; i++) {
+    // Consider all stops on route1 as potential transfer points
+    for (let i = 0; i < route1.stops.length; i++) {
+      if (i === fromIndex1) continue; // Skip the starting point
+      
       const transferStopId = route1.stops[i].stopId;
 
       for (const route2 of routes) {
@@ -119,21 +183,30 @@ function findTransferRoutes(routes, buses, stops, fromStopId, toStopId) {
         const transferIndex2 = route2.stops.findIndex(s => s.stopId === transferStopId);
         const toIndex2 = route2.stops.findIndex(s => s.stopId === toStopId);
 
-        if (transferIndex2 !== -1 && toIndex2 !== -1 && transferIndex2 < toIndex2) {
+        if (transferIndex2 !== -1 && toIndex2 !== -1 && transferIndex2 !== toIndex2) {
           const bus1 = buses.find(b => b.id === route1.busId);
           const bus2 = buses.find(b => b.id === route2.busId);
 
-          // Calculate distances
+          // Calculate first segment (can be forward or backward)
+          const isForward1 = fromIndex1 < i;
+          const startIdx1 = Math.min(fromIndex1, i);
+          const endIdx1 = Math.max(fromIndex1, i);
+          
           let distance1 = 0;
-          for (let j = fromIndex1; j < i; j++) {
+          for (let j = startIdx1; j < endIdx1; j++) {
             distance1 += calculateDistance(
               stops.find(s => s.id === route1.stops[j].stopId),
               stops.find(s => s.id === route1.stops[j + 1].stopId)
             );
           }
 
+          // Calculate second segment (can be forward or backward)
+          const isForward2 = transferIndex2 < toIndex2;
+          const startIdx2 = Math.min(transferIndex2, toIndex2);
+          const endIdx2 = Math.max(transferIndex2, toIndex2);
+
           let distance2 = 0;
-          for (let j = transferIndex2; j < toIndex2; j++) {
+          for (let j = startIdx2; j < endIdx2; j++) {
             distance2 += calculateDistance(
               stops.find(s => s.id === route2.stops[j].stopId),
               stops.find(s => s.id === route2.stops[j + 1].stopId)
@@ -143,6 +216,16 @@ function findTransferRoutes(routes, buses, stops, fromStopId, toStopId) {
           const fare1 = Math.round(distance1 * (bus1?.farePerKm || 1.2));
           const fare2 = Math.round(distance2 * (bus2?.farePerKm || 1.2));
 
+          // Calculate times based on direction
+          const dep1 = isForward1 ? route1.stops[fromIndex1].departureTime : route1.stops[fromIndex1].arrivalTime;
+          const arr1 = isForward1 ? route1.stops[i].arrivalTime : route1.stops[i].departureTime;
+          const dep2 = isForward2 ? route2.stops[transferIndex2].departureTime : route2.stops[transferIndex2].arrivalTime;
+          const arr2 = isForward2 ? route2.stops[toIndex2].arrivalTime : route2.stops[toIndex2].departureTime;
+
+          // Add transfer waiting time (minimum 10 minutes)
+          const waitTime = calculateWaitTime(arr1, dep2);
+          if (waitTime > 120) continue; // Skip if waiting time is more than 2 hours
+
           transferRoutes.push({
             type: 'transfer',
             segments: [
@@ -150,39 +233,39 @@ function findTransferRoutes(routes, buses, stops, fromStopId, toStopId) {
                 routeName: route1.name,
                 busNumber: bus1?.number || 'N/A',
                 busType: bus1?.type || 'Unknown',
+                direction: isForward1 ? 'forward' : 'return',
                 from: stops.find(s => s.id === fromStopId)?.name,
                 to: stops.find(s => s.id === transferStopId)?.name,
                 distance: Math.round(distance1),
                 fare: fare1,
-                departureTime: route1.stops[fromIndex1].departureTime,
-                arrivalTime: route1.stops[i].arrivalTime
+                departureTime: dep1,
+                arrivalTime: arr1
               },
               {
                 routeName: route2.name,
                 busNumber: bus2?.number || 'N/A',
                 busType: bus2?.type || 'Unknown',
+                direction: isForward2 ? 'forward' : 'return',
                 from: stops.find(s => s.id === transferStopId)?.name,
                 to: stops.find(s => s.id === toStopId)?.name,
                 distance: Math.round(distance2),
                 fare: fare2,
-                departureTime: route2.stops[transferIndex2].departureTime,
-                arrivalTime: route2.stops[toIndex2].arrivalTime
+                departureTime: dep2,
+                arrivalTime: arr2
               }
             ],
             transferPoint: stops.find(s => s.id === transferStopId)?.name,
+            waitTime: `${waitTime}m`,
             totalDistance: Math.round(distance1 + distance2),
             totalFare: fare1 + fare2,
-            totalDuration: calculateDuration(
-              route1.stops[fromIndex1].departureTime,
-              route2.stops[toIndex2].arrivalTime
-            )
+            totalDuration: calculateDuration(dep1, arr2)
           });
         }
       }
     }
   }
 
-  return transferRoutes;
+  return transferRoutes.sort((a, b) => a.totalFare - b.totalFare);
 }
 
 // Calculate distance between two stops (simplified - using straight line distance)
@@ -211,6 +294,18 @@ function calculateDuration(startTime, endTime) {
   const minutes = duration % 60;
   
   return hours > 0 ? `${hours}h ${minutes}m` : `${minutes}m`;
+}
+
+// Calculate waiting time between arrival and departure (for transfers)
+function calculateWaitTime(arrivalTime, departureTime) {
+  const [arrHour, arrMin] = arrivalTime.split(':').map(Number);
+  const [depHour, depMin] = departureTime.split(':').map(Number);
+  
+  let wait = (depHour * 60 + depMin) - (arrHour * 60 + arrMin);
+  if (wait < 0) wait += 24 * 60; // Handle overnight waiting
+  if (wait < 10) wait += 10; // Minimum 10 minutes transfer time
+  
+  return wait;
 }
 
 module.exports = exports;

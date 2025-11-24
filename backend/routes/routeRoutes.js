@@ -7,4 +7,9 @@ const routeController = require('../controllers/routeController');
 // @access  Public
 router.get('/find', routeController.findRoutes);
 
+// @route   GET /api/routes/stops
+// @desc    Get all stops with their route connectivity
+// @access  Public
+router.get('/stops', routeController.getAllStopsWithRoutes);
+
 module.exports = router;
