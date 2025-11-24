@@ -223,5 +223,95 @@
     "capacity": 55,
     "amenities": ["Low Floor", "Standing Room", "Wide Doors"],
     "farePerKm": 1.0
+  },
+  {
+    "id": "26",
+    "number": "KA-19-V-3456",
+    "type": "Volvo Multi-Axle",
+    "operator": "VRL Travels",
+    "capacity": 52,
+    "amenities": ["AC", "Reclining Seats", "USB Charging", "Entertainment", "Blanket"],
+    "farePerKm": 2.8
+  },
+  {
+    "id": "27",
+    "number": "KA-19-S-7890",
+    "type": "AC Sleeper",
+    "operator": "SRS Travels",
+    "capacity": 36,
+    "amenities": ["Sleeper Berths", "AC", "Blanket", "Pillow", "Reading Light"],
+    "farePerKm": 3.2
+  },
+  {
+    "id": "28",
+    "number": "KA-19-E-2468",
+    "type": "Express Deluxe",
+    "operator": "Orange Travels",
+    "capacity": 45,
+    "amenities": ["Pushback Seats", "Mobile Charging", "Water Bottle", "Snacks"],
+    "farePerKm": 1.8
+  },
+  {
+    "id": "29",
+    "number": "KA-19-L-1357",
+    "type": "Luxury Coach",
+    "operator": "FlixBus India",
+    "capacity": 44,
+    "amenities": ["Premium Seats", "AC", "WiFi", "Entertainment", "Refreshments"],
+    "farePerKm": 2.2
+  },
+  {
+    "id": "30",
+    "number": "KA-19-M-9753",
+    "type": "Mini Bus",
+    "operator": "Local Operator",
+    "capacity": 25,
+    "amenities": ["Compact Size", "City Routes", "Frequent Stops"],
+    "farePerKm": 1.1
+  },
+  {
+    "id": "31",
+    "number": "KA-19-V-8642",
+    "type": "Volvo AC",
+    "operator": "Kallada Travels",
+    "capacity": 49,
+    "amenities": ["AC", "Comfortable Seats", "USB Charging", "Water Bottle"],
+    "farePerKm": 2.4
+  },
+  {
+    "id": "32",
+    "number": "KA-19-E-3691",
+    "type": "Express",
+    "operator": "Parveen Travels",
+    "capacity": 52,
+    "amenities": ["Fast Service", "Limited Stops", "Reading Lights"],
+    "farePerKm": 1.6
+  },
+  {
+    "id": "33",
+    "number": "KA-19-S-1478",
+    "type": "Semi Sleeper",
+    "operator": "Spectra Connect",
+    "capacity": 40,
+    "amenities": ["Reclining Seats", "AC", "Blanket", "Leg Rest"],
+    "farePerKm": 2.0
+  },
+  {
+    "id": "34",
+    "number": "KA-19-D-2580",
+    "type": "Diesel Ordinary",
+    "operator": "KSRTC",
+    "capacity": 60,
+    "amenities": ["Basic Seating", "Standing Room", "Budget Option"],
+    "farePerKm": 0.9
+  },
+  {
+    "id": "35",
+    "number": "KA-19-H-3692",
+    "type": "Hi-Tech Volvo",
+    "operator": "RDS Travels",
+    "capacity": 46,
+    "amenities": ["Premium AC", "Leather Seats", "GPS Tracking", "WiFi"],
+    "farePerKm": 2.9
   }
 ]

@@ -22,57 +22,90 @@ interface Place {
 const LODGES: Place[] = [
   {
     id: "1",
-    name: "Hotel Poonja International",
-    address: "K.S. Rao Road, Mangalore",
-    phone: "+91 824 442 7171",
+    name: "Hotel Moti Mahal",
+    address: "Hampankatta, Mangalore",
+    phone: "+91 824 425 3555",
     rating: 4.2,
-    distance: "0.5 km from KSRTC",
+    distance: "0.2 km from Bus Stand",
     timing: "24/7",
-    amenities: ["Free WiFi", "AC Rooms", "Restaurant", "Parking"],
+    amenities: ["AC Rooms", "Restaurant", "Room Service", "Parking"],
     type: "lodge"
   },
   {
     id: "2",
-    name: "The Ocean Pearl",
-    address: "Navabharat Circle, Mangalore",
-    phone: "+91 824 242 1000",
-    rating: 4.5,
-    distance: "1.2 km from KSRTC",
+    name: "Hotel Ayodhya",
+    address: "Bunts Hostel Road, Mangalore",
+    phone: "+91 824 242 3421",
+    rating: 4.0,
+    distance: "0.8 km from Bus Stand",
     timing: "24/7",
-    amenities: ["Swimming Pool", "Spa", "Restaurant", "Bar"],
+    amenities: ["Free WiFi", "Restaurant", "Laundry", "Travel Desk"],
     type: "lodge"
   },
   {
     id: "3",
-    name: "Hotel Srinivas",
-    address: "Car Street, Udupi",
-    phone: "+91 820 252 0857",
-    rating: 4.0,
-    distance: "0.3 km from Udupi Bus Stand",
+    name: "Deepa Comforts",
+    address: "Car Street, Mangalore",
+    phone: "+91 824 242 4488",
+    rating: 4.1,
+    distance: "0.3 km from Bus Stand",
     timing: "24/7",
-    amenities: ["AC Rooms", "Restaurant", "Free Breakfast"],
+    amenities: ["AC Rooms", "Restaurant", "Free Breakfast", "WiFi"],
     type: "lodge"
   },
   {
     id: "4",
-    name: "Manipal Inn",
-    address: "Tiger Circle, Manipal",
-    phone: "+91 820 257 0888",
-    rating: 4.3,
-    distance: "0.2 km from Manipal",
+    name: "Hotel Prabhu",
+    address: "Hampankatta, Mangalore",
+    phone: "+91 824 425 4466",
+    rating: 3.8,
+    distance: "0.4 km from Bus Stand",
     timing: "24/7",
-    amenities: ["Free WiFi", "Restaurant", "Conference Hall"],
+    amenities: ["Budget Friendly", "Restaurant", "Room Service"],
     type: "lodge"
   },
   {
     id: "5",
-    name: "Paradise Isle Beach Resort",
-    address: "Malpe Beach Road, Udupi",
-    phone: "+91 820 253 5757",
-    rating: 4.4,
-    distance: "Near Malpe Beach",
+    name: "Hotel Navaratna Palace",
+    address: "Balmatta Road, Mangalore",
+    phone: "+91 824 244 2244",
+    rating: 4.3,
+    distance: "0.6 km from Bus Stand",
     timing: "24/7",
-    amenities: ["Beach View", "Restaurant", "Water Sports"],
+    amenities: ["AC/Non-AC Rooms", "Restaurant", "Conference Hall"],
+    type: "lodge"
+  },
+  {
+    id: "6",
+    name: "The Taj Mahal Hotel",
+    address: "Bunder, Mangalore",
+    phone: "+91 824 244 5566",
+    rating: 4.0,
+    distance: "1.2 km from Bus Stand",
+    timing: "24/7",
+    amenities: ["Sea View", "Restaurant", "Bar", "Parking"],
+    type: "lodge"
+  },
+  {
+    id: "7",
+    name: "Hotel Surya",
+    address: "Court Road, Mangalore",
+    phone: "+91 824 244 7788",
+    rating: 3.9,
+    distance: "0.7 km from Bus Stand",
+    timing: "24/7",
+    amenities: ["Budget Rooms", "Restaurant", "Travel Services"],
+    type: "lodge"
+  },
+  {
+    id: "8",
+    name: "Hotel Poonja International",
+    address: "K.S. Rao Road, Mangalore",
+    phone: "+91 824 442 7171",
+    rating: 4.5,
+    distance: "1.5 km from Bus Stand",
+    timing: "24/7",
+    amenities: ["Luxury Rooms", "Multi-cuisine Restaurant", "Swimming Pool"],
     type: "lodge"
   }
 ];
@@ -132,6 +165,61 @@ const HOSPITALS: Place[] = [
     timing: "24/7 Emergency",
     amenities: ["Teaching Hospital", "All Specialties", "Research"],
     type: "hospital"
+  },
+  {
+    id: "6",
+    name: "Unity Hospital",
+    address: "Deralakatte, Mangalore",
+    phone: "+91 824 246 7890",
+    rating: 4.2,
+    distance: "4.0 km from KSRTC",
+    timing: "24/7 Emergency",
+    amenities: ["Multi-Specialty", "Dialysis", "Maternity"],
+    type: "hospital"
+  },
+  {
+    id: "7",
+    name: "Wenlock Hospital",
+    address: "Hampankatta, Mangalore",
+    phone: "+91 824 242 4242",
+    rating: 4.0,
+    distance: "0.8 km from KSRTC",
+    timing: "24/7 Emergency",
+    amenities: ["Government Hospital", "Emergency", "Free Treatment"],
+    type: "hospital"
+  },
+  {
+    id: "8",
+    name: "Kasturba Medical College Hospital",
+    address: "Light House Hill, Mangalore",
+    phone: "+91 824 242 2271",
+    rating: 4.4,
+    distance: "2.5 km from KSRTC",
+    timing: "24/7 Emergency",
+    amenities: ["Teaching Hospital", "Research", "All Specialties"],
+    type: "hospital"
+  },
+  {
+    id: "9",
+    name: "District Hospital Puttur",
+    address: "Puttur Town",
+    phone: "+91 825 425 6677",
+    rating: 3.8,
+    distance: "0.5 km from Puttur Bus Stand",
+    timing: "24/7 Emergency",
+    amenities: ["Government Hospital", "Basic Healthcare", "Emergency"],
+    type: "hospital"
+  },
+  {
+    id: "10",
+    name: "Bantwal Taluk Hospital",
+    address: "Bantwal",
+    phone: "+91 824 527 2233",
+    rating: 3.7,
+    distance: "0.3 km from Bantwal Bus Stand",
+    timing: "24/7 Emergency",
+    amenities: ["Government Hospital", "Basic Healthcare", "Maternity"],
+    type: "hospital"
   }
 ];
 
@@ -189,6 +277,83 @@ const BANKS: Place[] = [
     distance: "Near Kadri Temple",
     timing: "10:00 AM - 4:00 PM",
     amenities: ["ATM 24/7", "Forex", "Insurance"],
+    type: "bank"
+  },
+  {
+    id: "6",
+    name: "Syndicate Bank - Car Street",
+    address: "Car Street, Mangalore",
+    phone: "+91 824 242 5432",
+    rating: 4.0,
+    distance: "1.0 km from KSRTC",
+    timing: "10:00 AM - 4:00 PM",
+    amenities: ["ATM 24/7", "Senior Citizen Services", "Pension"],
+    type: "bank"
+  },
+  {
+    id: "7",
+    name: "Kotak Mahindra Bank - Manipal",
+    address: "Tiger Circle, Manipal",
+    phone: "+91 820 257 8765",
+    rating: 4.1,
+    distance: "0.3 km from Manipal MIT",
+    timing: "10:00 AM - 5:00 PM",
+    amenities: ["ATM 24/7", "Digital Banking", "Investment Services"],
+    type: "bank"
+  },
+  {
+    id: "8",
+    name: "Indian Bank - Puttur",
+    address: "Main Road, Puttur",
+    phone: "+91 825 425 3456",
+    rating: 3.8,
+    distance: "0.2 km from Puttur Bus Stand",
+    timing: "10:00 AM - 4:00 PM",
+    amenities: ["ATM 24/7", "Rural Banking", "Self Help Groups"],
+    type: "bank"
+  },
+  {
+    id: "9",
+    name: "Corporation Bank - Bantwal",
+    address: "BC Road, Bantwal",
+    phone: "+91 824 527 4567",
+    rating: 3.9,
+    distance: "0.1 km from Bantwal Bus Stand",
+    timing: "10:00 AM - 4:00 PM",
+    amenities: ["ATM 24/7", "Agricultural Loans", "Business Banking"],
+    type: "bank"
+  },
+  {
+    id: "10",
+    name: "Federal Bank - Karkala",
+    address: "Karkala Town",
+    phone: "+91 825 452 7890",
+    rating: 4.0,
+    distance: "Near Karkala Bus Stand",
+    timing: "10:00 AM - 4:00 PM",
+    amenities: ["ATM 24/7", "NRI Services", "Gold Loan"],
+    type: "bank"
+  },
+  {
+    id: "11",
+    name: "Punjab National Bank - Surathkal",
+    address: "NITK Campus, Surathkal",
+    phone: "+91 824 247 5678",
+    rating: 4.0,
+    distance: "Near NITK Campus",
+    timing: "10:00 AM - 4:00 PM",
+    amenities: ["ATM 24/7", "Student Banking", "Education Loans"],
+    type: "bank"
+  },
+  {
+    id: "12",
+    name: "Karnataka Bank - Udupi",
+    address: "Diana Circle, Udupi",
+    phone: "+91 820 252 6789",
+    rating: 4.2,
+    distance: "0.5 km from Udupi Bus Stand",
+    timing: "10:00 AM - 5:00 PM",
+    amenities: ["ATM 24/7", "Local Banking", "Micro Finance"],
     type: "bank"
   }
 ];
@@ -258,6 +423,94 @@ const RESTAURANTS: Place[] = [
     distance: "Near Malpe Beach",
     timing: "11:00 AM - 11:00 PM",
     amenities: ["Seafood", "Beach View", "Bar", "Live Music"],
+    type: "restaurant"
+  },
+  {
+    id: "7",
+    name: "Hotel Janatha",
+    address: "Kundapura",
+    phone: "+91 820 254 1234",
+    rating: 4.2,
+    distance: "Near Kundapura Bus Stand",
+    timing: "6:00 AM - 10:00 PM",
+    amenities: ["Local Cuisine", "Fish Curry", "Budget Meals"],
+    type: "restaurant"
+  },
+  {
+    id: "8",
+    name: "Sagar Ratna",
+    address: "Hampankatta, Mangalore",
+    phone: "+91 824 242 3456",
+    rating: 4.1,
+    distance: "0.3 km from KSRTC",
+    timing: "8:00 AM - 10:30 PM",
+    amenities: ["South Indian", "Fast Service", "Clean"],
+    type: "restaurant"
+  },
+  {
+    id: "9",
+    name: "Paarijaatha",
+    address: "Kankanady, Mangalore",
+    phone: "+91 824 246 7890",
+    rating: 4.3,
+    distance: "2.5 km from KSRTC",
+    timing: "11:00 AM - 11:00 PM",
+    amenities: ["Fine Dining", "Multi-Cuisine", "Family Restaurant"],
+    type: "restaurant"
+  },
+  {
+    id: "10",
+    name: "Shree Krishna Inn",
+    address: "Car Street, Udupi",
+    phone: "+91 820 252 4567",
+    rating: 4.4,
+    distance: "0.2 km from Udupi Bus Stand",
+    timing: "6:00 AM - 9:00 PM",
+    amenities: ["Pure Vegetarian", "Traditional", "Temple Food"],
+    type: "restaurant"
+  },
+  {
+    id: "11",
+    name: "Coastal Curry",
+    address: "Karkala",
+    phone: "+91 825 452 3456",
+    rating: 4.0,
+    distance: "Near Karkala Bus Stand",
+    timing: "11:00 AM - 9:00 PM",
+    amenities: ["Coastal Cuisine", "Spicy Food", "Local Favorite"],
+    type: "restaurant"
+  },
+  {
+    id: "12",
+    name: "MTR - Mavalli Tiffin Room",
+    address: "Lalbagh Road, Mangalore",
+    phone: "+91 824 244 5678",
+    rating: 4.5,
+    distance: "1.5 km from KSRTC",
+    timing: "6:30 AM - 8:30 PM",
+    amenities: ["Authentic South Indian", "Breakfast Specialist", "Traditional"],
+    type: "restaurant"
+  },
+  {
+    id: "13",
+    name: "Fish Factory",
+    address: "Surathkal Beach",
+    phone: "+91 824 247 8901",
+    rating: 4.2,
+    distance: "Near Surathkal Beach",
+    timing: "12:00 PM - 10:00 PM",
+    amenities: ["Fresh Seafood", "Beach Side", "Mangalorean Style"],
+    type: "restaurant"
+  },
+  {
+    id: "14",
+    name: "Hotel Rajdhani",
+    address: "Puttur",
+    phone: "+91 825 425 7890",
+    rating: 3.9,
+    distance: "0.1 km from Puttur Bus Stand",
+    timing: "7:00 AM - 9:30 PM",
+    amenities: ["Gujarati Thali", "Vegetarian", "Unlimited Meals"],
     type: "restaurant"
   }
 ];
