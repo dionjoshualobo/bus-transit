@@ -22,8 +22,8 @@ A comprehensive full-stack bus transit system for the Mangalore-Udupi-Kundapura 
 
 1. **Clone the repository:**
 ```bash
-git clone https://github.com/aksh56511/bus.git
-cd bus
+git clone https://github.com/dionjoshualobo/bus-transit.git
+cd bus-transit
 ```
 
 2. **Install dependencies:**
@@ -249,23 +249,3 @@ Internal team project - Not for public distribution
 ---
 
 **Built with ❤️ for the Mangalore-Udupi transit system**
-│   ├── config/
-│   ├── controllers/
-│   ├── models/
-│   ├── routes/
-│   ├── utils/
-│   ├── data/
-│   └── server.js
-├── frontend/
-│   ├── src/
-│   │   ├── components/
-│   │   ├── pages/
-│   │   ├── utils/
-│   │   └── main.tsx
-│   └── package.json
-└── package.json
-```
-
-## License
-
-MIT
